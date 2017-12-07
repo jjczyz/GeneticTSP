@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GeneticTSP.Views;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -15,7 +16,7 @@ namespace GeneticTSP
     {
         void AppStartup(object sender, StartupEventArgs e)
         {
-            Views.MainView window = new Views.MainView();
+            MainView window = new MainView();
             window.Show();
         }
 
