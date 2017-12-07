@@ -25,26 +25,96 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.Column="0">
-            <Button x:Name="button_exit" Content="Zamknij" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding ExitButtonCommand}"  Width="69" Height="Auto" Grid.Row="2"  Grid.Column="1" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="4*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+                
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <Label x:Name="option1Label" Content="Parametr1" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                <TextBox x:Name="option1ValueTextBox" Text="{Binding Option1}"  VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
+                <Slider x:Name="option1Slider" Minimum="{Binding Option1Min}" Maximum="{Binding Option1Max}" Value="{Binding Option1}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2" />
+
+                <Label x:Name="option2Label" Content="Parametr2" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+                <TextBox x:Name="option2ValueTextBox" Text="{Binding Option2}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" />
+                <Slider x:Name="option2Slider" Minimum="0" Maximum="1" Value="{Binding Option2}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" />
+
+                <Label x:Name="option3Label" Content="Parametr3" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
+                <TextBox x:Name="option3ValueTextBox" Text="{Binding Option3}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" />
+                <Slider x:Name="option3Slider" Minimum="0" Maximum="50" Value="{Binding Option3}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" />
+
+                <Label x:Name="option4Label" Content="Parametr4" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
+                <TextBox x:Name="option4ValueTextBox" Text="{Binding Option4}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" />
+                <Slider x:Name="option4Slider" Minimum="0" Maximum="15" Value="{Binding Option4}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" />
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button x:Name="progressPopulationBy10Button" Content="Dodaj 10 pokoleń" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding ProgressPopulationBy10ButtonCommand}"   Height="Auto" Grid.Row="0" Grid.Column="1"/>
+                <Button x:Name="progressPopulationBy100Button" Content="Dodaj 100 pokoleń" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding ProgressPopulationBy100ButtonCommand}"   Height="Auto" Grid.Row="1" Grid.Column="1"/>
+            </Grid>
+            <Grid Grid.Row="3" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button x:Name="runButton" Content="Rozpocznij" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding RunButtonCommand}"  Width="69" Height="Auto" Grid.Row="1" Grid.Column="0"/>
+                <Button x:Name="exitButton" Content="Stop" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding StopButtonCommand}"  Width="69" Height="Auto" Grid.Row="1" Grid.Column="1"/>
+            </Grid>
+
+
+
         </Grid>
         <Grid Grid.Row="0" Grid.Column="1">
 
-            <Charting:Chart Margin="0,0,15,0" Name="resultChart" >
+            <Charting:Chart Margin="0,0,15,0" Name="resultChart" BorderThickness="0" >
+                
                 <Charting:Chart.LegendStyle>
                     <Style TargetType="DV:Legend">
                         <Setter Property="Width" Value="0" />
                     </Style>
                 </Charting:Chart.LegendStyle>
                 <Charting:Chart.Axes>
-                    <Charting:LinearAxis Orientation="X" Title="Pokolenie" Interval="1" ShowGridLines="False"/>
-                    <Charting:LinearAxis Orientation="Y" Title="Najlepszy wynik"  Interval="10" ShowGridLines="False"/>
+                    <Charting:LinearAxis Orientation="X" Title="Pokolenie" Interval="50" ShowGridLines="False"/>
+                    <Charting:LinearAxis Orientation="Y" Title="Najlepszy wynik"  Interval="100" ShowGridLines="False"/>
                 </Charting:Chart.Axes>
                 <Charting:Chart.Series>
                     <Charting:LineSeries DataContext="{Binding}"
                                          DependentValueBinding="{Binding Path=Value}"
                                          IndependentValueBinding="{Binding Path=Key}"
-                                         ItemsSource="{Binding Path=Results}"/>     
+                                         ItemsSource="{Binding Path=Results}">
+                        <Charting:LineSeries.DataPointStyle>
+                            <Style TargetType="Charting:LineDataPoint">
+                                <Setter Property="Opacity" Value="0" />
+                                <Setter Property="Background" Value="Blue" />
+                            </Style>
+                        </Charting:LineSeries.DataPointStyle>
+                    </Charting:LineSeries>
                 </Charting:Chart.Series>
+
+                
             </Charting:Chart>
         </Grid>
     </Grid>
