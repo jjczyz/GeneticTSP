@@ -1,0 +1,10 @@
+﻿<Application x:Class="GeneticTSP.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GeneticTSP"
+             DispatcherUnhandledException="ApplicationDispatcherUnhandledException"
+             Startup="AppStartup">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

@@ -1,0 +1,59 @@
+﻿<Window x:Class="GeneticTSP.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ns="clr-namespace:GeneticTSP"
+        xmlns:local="clr-namespace:GeneticTSP.Views"
+        xmlns:VM="clr-namespace:GeneticTSP.ViewModels"
+        mc:Ignorable="d"
+        Title="GeneticTSP" Height="350" Width="1000">
+    <Window.DataContext>
+        <VM:MainViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="110"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.4*" />
+                <ColumnDefinition Width="2.0*" />
+                <ColumnDefinition Width="0.05*" />
+                <ColumnDefinition Width="2.35*" />
+                <ColumnDefinition Width="0.3*" />
+                <ColumnDefinition Width="0.8*" />
+                <ColumnDefinition Width="7.0*" />
+                <ColumnDefinition Width="2.3*" />
+
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <TextBox x:Name="textBox_inputFilePath" Margin="2,2,15,2" TextWrapping="Wrap" Text="{Binding Path=InputFilePath}" HorizontalAlignment="STRETCH" VerticalAlignment="Center" Width="Auto" Height="Auto" Grid.Column="6" Grid.Row="1"/>
+            <Label x:Name="label_inputFilePath" Content="Plik źródłowy" Margin="10,0,0,0" HorizontalAlignment="Left"  VerticalAlignment="Center"  Width="Auto" Height="Auto" Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2"/>
+            <Button x:Name="button_inputFilePath" Content="..." HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Command="{Binding InputPathButtonCommand}" Width="21" Height="21" Grid.Row="1" Grid.Column="5" />
+            <TextBox x:Name="textBox_outputFilePath" Margin="2,2,15,2" TextWrapping="Wrap" Text="{Binding Path=OutputFilePath}" HorizontalAlignment="STRETCH" VerticalAlignment="Center" Width="Auto" Height="Auto" Grid.Column="6" Grid.Row="3"/>
+            <Label x:Name="label_outputFilePath" Content="Plik docelowy" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="Auto" Height="Auto"  Grid.Column="5" Grid.Row="2" Grid.ColumnSpan="2"/>
+            <Button x:Name="button_outputFilePath" Content="..." HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="STRETCH" Command="{Binding OutputPathButtonCommand}" Width="21" Height="21" Grid.Row="3" Grid.Column="5"/>
+            <Button x:Name="button_run" Content="Wykonaj"  HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding RunButtonCommand}" Width="70" Height="Auto" Grid.Row="1"  Grid.Column="1" />
+            <Button x:Name="button_exit" Content="Zamknij" HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding ExitButtonCommand}"  Width="69" Height="Auto" Grid.Row="2"  Grid.Column="1" />
+            <Label x:Name="label_progress" Content="{Binding Path=ConversionState}"  HorizontalAlignment="Stretch"  VerticalAlignment="Center" Width="Auto" Height="Auto" Grid.Column="1" Grid.Row="3"/>
+            <Label x:Name="label_startDate" Content="Data początkowa" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="Auto" Height="Auto"  Grid.Column="3" Grid.Row="0" Margin="5,0,0,0"/>
+            <DatePicker x:Name="datePicker_startDate" SelectedDate="{Binding Path=StartDate}" Grid.Column="3" HorizontalAlignment="Stretch" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="Auto" Height="Auto"/>
+            <Label x:Name="label_endDate" Content="Data końcowa" HorizontalAlignment="Stretch"  VerticalAlignment="Center"  Width="Auto" Height="Auto" Grid.Column="3" Grid.Row="2" Margin="5,0,0,0"/>
+            <DatePicker x:Name="datePicker_endDate" SelectedDate="{Binding Path=EndDate}" Grid.Column="3" HorizontalAlignment="Stretch" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Center" Width="Auto" Height="Auto"/>
+        </Grid>
+    </Grid>
+</Window>
