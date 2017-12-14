@@ -79,6 +79,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\RandomHelper.cs" />
     <Compile Include="Model\Graph.cs" />
     <Compile Include="Services\TSPSolver.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

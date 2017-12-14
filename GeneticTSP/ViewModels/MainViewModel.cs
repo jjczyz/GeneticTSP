@@ -15,17 +15,47 @@ namespace GeneticTSP.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand StopButtonCommand { get; set; }
-        public ICommand RunButtonCommand  { get; set; }
+        public ICommand RunButtonCommand { get; set; }
         public ICommand ProgressPopulationBy10ButtonCommand { get; set; }
         public ICommand ProgressPopulationBy100ButtonCommand { get; set; }
 
         TSPSolver Solver;
         //wyjściowa tablica wszystkich pokoleń i najlepszego wyniku w każdym pokoleniu
-        private ObservableCollection<KeyValuePair<int, int>> _results = new ObservableCollection<KeyValuePair<int, int>>(); 
-        public ObservableCollection<KeyValuePair<int, int>> Results 
+        private ObservableCollection<KeyValuePair<int, int>> _results = new ObservableCollection<KeyValuePair<int, int>>();
+        public ObservableCollection<KeyValuePair<int, int>> Results
         {
             get { return _results; }
         }
+
+        private int _graphSize { get; set; }
+        public int GraphSize
+        {
+            get { return _graphSize; }
+            set
+            {
+                if (_graphSize != value)
+                {
+                    _graphSize = value;
+                    NotifyPropertyChanged("Option1");
+                }
+            }
+        }
+
+        private bool _graphSymmetrical { get; set; }
+        public bool GraphSymmetrical
+        {
+            get { return _graphSymmetrical; }
+            set
+            {
+                if (_graphSymmetrical != value)
+                {
+                    _graphSymmetrical = value;
+                    NotifyPropertyChanged("GraphSymmetrical");
+                }
+            }
+        }
+
+
 
         private int _option1 { get; set; }
         public int Option1Max
@@ -41,15 +71,15 @@ namespace GeneticTSP.ViewModels
             get { return _option1; }
             set
             {
-                if (this._option1 != value)
+                if (_option1 != value)
                 {
                     if (value > Option1Max)
-                        this._option1 = Option1Max;
+                        _option1 = Option1Max;
                     else if (value < Option1Min)
-                        this._option1 = Option1Max;
+                        _option1 = Option1Max;
                     else
-                        this._option1 = value;
-                    this.NotifyPropertyChanged("Option1");
+                        _option1 = value;
+                    NotifyPropertyChanged("Option1");
                 }
             }
         }
@@ -61,12 +91,13 @@ namespace GeneticTSP.ViewModels
             StopButtonCommand = new RelayCommand(param => Solver.Stop());
             ProgressPopulationBy10ButtonCommand = new RelayCommand(param => ProgressPopulation(10));
             ProgressPopulationBy100ButtonCommand = new RelayCommand(param => ProgressPopulation(100));
+            GraphSymmetrical = true;
         }
 
         private void Run(object v)
         {
             Solver.Stop();
-            Solver = new TSPSolver(); 
+            Solver = new TSPSolver();
         }
 
         private void ProgressPopulation(int num) //to będzie potem w Solverze

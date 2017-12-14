@@ -17,7 +17,7 @@
 
     <Grid DataContext="{Binding Source={StaticResource VM}}" Background="LightSteelBlue">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2.5*" />
             <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
 
@@ -42,13 +42,19 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="2.25*" />
                 </Grid.ColumnDefinitions>
-                <Label x:Name="option1Label" Content="Parametr1" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
-                <TextBox x:Name="option1ValueTextBox" Text="{Binding Option1}"  VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
-                <Slider x:Name="option1Slider" Minimum="{Binding Option1Min}" Maximum="{Binding Option1Max}" Value="{Binding Option1}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2" />
-
+                <Label x:Name="graphSizeLabel" Content="Rozmiar grafu" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                <TextBox x:Name="option1ValueTextBox" Text="{Binding GraphSize}"  VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
+                <Grid Grid.Row="0" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox x:Name="graphSymmetricalCheckBox"  IsChecked="{Binding GraphSymmetrical}" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                    <Label x:Name="graphSymmetricalLabel" Content="Symetryczny" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,0,0,2"/>
+                </Grid>
                 <Label x:Name="option2Label" Content="Parametr2" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
                 <TextBox x:Name="option2ValueTextBox" Text="{Binding Option2}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" />
                 <Slider x:Name="option2Slider" Minimum="0" Maximum="1" Value="{Binding Option2}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" />
