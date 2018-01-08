@@ -103,8 +103,8 @@
                     </Style>
                 </Charting:Chart.LegendStyle>
                 <Charting:Chart.Axes>
-                    <Charting:LinearAxis Orientation="X" Title="Pokolenie" Interval="50" ShowGridLines="False"/>
-                    <Charting:LinearAxis Orientation="Y" Title="Najlepszy wynik"  Interval="100" ShowGridLines="False"/>
+                    <Charting:LinearAxis Orientation="X" Title="Pokolenie" Interval="10" ShowGridLines="False"/>
+                    <Charting:LinearAxis Orientation="Y" Title="Najlepszy wynik"  Interval="5" ShowGridLines="False"/>
                 </Charting:Chart.Axes>
                 <Charting:Chart.Series>
                     <Charting:LineSeries DataContext="{Binding}"

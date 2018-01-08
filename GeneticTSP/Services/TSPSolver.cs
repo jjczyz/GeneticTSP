@@ -1,6 +1,9 @@
-﻿using GeneticTSP.Model;
+﻿using GeneticTSP.Extensions;
+using GeneticTSP.Helpers;
+using GeneticTSP.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -16,8 +19,10 @@ namespace GeneticTSP.Services
         BackgroundWorker _solver;
         public bool PendingNewWorker = false;
         public bool IsFinished = false;
+        public bool IsInitialized = false;
 
-        private List<int[]> _population;
+        public ObservableCollection<KeyValuePair<int, int>> Results = new ObservableCollection<KeyValuePair<int, int>>();
+        private List<Route> _population;
         private Graph _graph;
 
         public TSPSolver()
@@ -30,10 +35,37 @@ namespace GeneticTSP.Services
             _solver.RunWorkerCompleted += new RunWorkerCompletedEventHandler(SolverCompleted);
         }
 
-        public void Initialize()
+        public void Initialize(int size, bool symmetrical)
         {
-            //TODO tutaj wygenerować graf i ustawić te parametry ewolucyjne
+            Results.Clear();
+            _graph = new Graph(size, symmetrical);
+            //pozostałe parametry ewolucyjne
+            InitializePopulation();
+            IsInitialized = true;
         }
+
+        private void InitializePopulation() // pewnie parametr wielkości populacji, póki co dam ze 100
+        {
+            var basicPermutation = new int[_graph.Size - 1]; // każdy chromosom ma n+1 elementów, ale pierwszy i ostatni element to zawsze 0
+            for (int i = 1; i < _graph.Size; i++)
+            {
+                basicPermutation[i - 1] = i;
+            }
+            _population = new List<Route>();
+            Random random = new Random();
+            for (int i = 0; i < 100; i++)
+            {
+                int[] routeValues = new int[basicPermutation.Length];
+                Array.Copy(basicPermutation, routeValues, basicPermutation.Length);
+                var r = random.Next();
+                random.Shuffle(routeValues);
+                var route = new Route();
+                route.order = routeValues;
+                route.graph = _graph;
+                _population.Add(route);
+            }
+        }
+
         public void Run()
         {
             if (_solver.IsBusy)
@@ -41,7 +73,7 @@ namespace GeneticTSP.Services
                 _solver.CancelAsync();
                 PendingNewWorker = true;
             }
-                
+
             else _solver.RunWorkerAsync();
         }
 
@@ -54,12 +86,12 @@ namespace GeneticTSP.Services
         }
 
         private void SolverDoWork(object sender, DoWorkEventArgs e)
-        {           
+        {
             BackgroundWorker worker = sender as BackgroundWorker;
 
             //TODO
 
-            if (worker.CancellationPending) 
+            if (worker.CancellationPending)
             {
                 e.Cancel = true;
                 return;
@@ -88,5 +120,38 @@ namespace GeneticTSP.Services
             }
             IsFinished = true;
         }
+
+        public void ProgressPopulation(int num)
+        {
+            Random random = new Random();
+            for (int i = 0; i < num; i++)
+            {
+                var crossoverSubset = GeneticHelper.GetCrossoverSubset(_population, 0.25f);             
+                while(crossoverSubset.Count > 1)
+                {
+                    var secondParentIdx = random.Next(0, crossoverSubset.Count());
+                    var child = GeneticHelper.Crossover(crossoverSubset[0], crossoverSubset[secondParentIdx]);
+                    _population.Add(child);
+                    crossoverSubset.RemoveAt(secondParentIdx);
+                    crossoverSubset.RemoveAt(0);
+                }
+                _population = GeneticHelper.TrimPopulation(_population, 100);
+                Results.Add(new KeyValuePair<int, int>(Results.Count + 1, GetBestResult()));
+            }
+        }
+
+        
+
+        public int GetBestResult()
+        {
+            var bestResult = int.MaxValue;
+            foreach (Route route in _population)
+            {
+                bestResult = Math.Min(bestResult, route.fitness);
+            }
+            return bestResult;
+        }
+
+        
     }
 }

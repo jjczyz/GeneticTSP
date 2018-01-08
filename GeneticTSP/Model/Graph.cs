@@ -21,6 +21,7 @@ namespace GeneticTSP.Model
         {
             Size = size;
             Symmetrical = symmetrical;
+            SetDistances();
         }
 
         private void SetDistances()
@@ -29,7 +30,7 @@ namespace GeneticTSP.Model
 
             Random rand = new Random();
             for (int i = 0; i < Distances.GetLength(0); i++)
-                for (int j = 0; j <= Distances.GetLength(1); i++)
+                for (int j = 0; j < Distances.GetLength(1); j++)
                 {
                     if (i == j) //odległość z danego punktu do samego siebie, więc zostaje 0
                         continue;

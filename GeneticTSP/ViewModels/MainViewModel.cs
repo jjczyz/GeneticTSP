@@ -21,10 +21,10 @@ namespace GeneticTSP.ViewModels
 
         TSPSolver Solver;
         //wyjściowa tablica wszystkich pokoleń i najlepszego wyniku w każdym pokoleniu
-        private ObservableCollection<KeyValuePair<int, int>> _results = new ObservableCollection<KeyValuePair<int, int>>();
+        
         public ObservableCollection<KeyValuePair<int, int>> Results
         {
-            get { return _results; }
+            get { return Solver.Results; }
         }
 
         private int _graphSize { get; set; }
@@ -87,28 +87,27 @@ namespace GeneticTSP.ViewModels
         public MainViewModel()
         {
             Solver = new TSPSolver();
-            RunButtonCommand = new RelayCommand(param => Solver.Run());
+            RunButtonCommand = new RelayCommand(Run);
             StopButtonCommand = new RelayCommand(param => Solver.Stop());
             ProgressPopulationBy10ButtonCommand = new RelayCommand(param => ProgressPopulation(10));
             ProgressPopulationBy100ButtonCommand = new RelayCommand(param => ProgressPopulation(100));
             GraphSymmetrical = true;
+            GraphSize = 10;
+        }
+
+        private void ProgressPopulation(int num)
+        {
+            Solver.Stop();
+            if(!Solver.IsInitialized)
+                Solver.Initialize(GraphSize, GraphSymmetrical);
+            Solver.ProgressPopulation(num);
         }
 
         private void Run(object v)
         {
             Solver.Stop();
-            Solver = new TSPSolver();
-        }
-
-        private void ProgressPopulation(int num) //to będzie potem w Solverze
-        {
-            for (int i = 0; i < num; i++)
-            {
-                if (Results.Count() == 0)
-                    Results.Add(new KeyValuePair<int, int>(1, 1000));
-                else
-                    Results.Add(new KeyValuePair<int, int>(Results.Count, 1000 / Results.Count()));
-            }
+            Solver.Initialize(GraphSize, GraphSymmetrical);
+            Solver.Run();
         }
 
         public void NotifyPropertyChanged(string s)
