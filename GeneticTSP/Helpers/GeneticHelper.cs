@@ -9,12 +9,12 @@ namespace GeneticTSP.Helpers
 {
     public static class GeneticHelper
     {
+        public static Random rand = new Random();
         public static Route Crossover(Route parentOne, Route parentTwo)
         {
             Route child = new Route();
             child.order = new int[parentOne.order.Length];
             child.graph = parentOne.graph;
-            Random rand = new Random();
             int passedGenesNum = rand.Next(1, child.order.Length - 1);
             int[] passedGenes = new int[passedGenesNum];
 
@@ -36,6 +36,18 @@ namespace GeneticTSP.Helpers
                 }
             }
             return child;
+        }
+
+        public static Route Mutation(Route route)
+        {
+            var swappedIdxOne = rand.Next(0, route.order.Length - 1);
+            var swappedIdxTwo = rand.Next(0, route.order.Length - 1);
+            while(route.order.Length > 1 && swappedIdxOne == swappedIdxTwo)
+                swappedIdxTwo = rand.Next(0, route.order.Length - 1);
+            var temp = route.order[swappedIdxOne];
+            route.order[swappedIdxOne] = route.order[swappedIdxTwo];
+            route.order[swappedIdxTwo] = temp;
+            return route;
         }
 
         public static List<Route> GetCrossoverSubset(List<Route> population, float crossoverRatio)

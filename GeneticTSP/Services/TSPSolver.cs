@@ -126,11 +126,13 @@ namespace GeneticTSP.Services
             Random random = new Random();
             for (int i = 0; i < num; i++)
             {
-                var crossoverSubset = GeneticHelper.GetCrossoverSubset(_population, 0.25f);             
+                var crossoverSubset = GeneticHelper.GetCrossoverSubset(_population, 0.50f);             
                 while(crossoverSubset.Count > 1)
                 {
                     var secondParentIdx = random.Next(0, crossoverSubset.Count());
                     var child = GeneticHelper.Crossover(crossoverSubset[0], crossoverSubset[secondParentIdx]);
+                    if (random.Next(1, 100) < 10)
+                        child = GeneticHelper.Mutation(child);
                     _population.Add(child);
                     crossoverSubset.RemoveAt(secondParentIdx);
                     crossoverSubset.RemoveAt(0);
@@ -139,8 +141,6 @@ namespace GeneticTSP.Services
                 Results.Add(new KeyValuePair<int, int>(Results.Count + 1, GetBestResult()));
             }
         }
-
-        
 
         public int GetBestResult()
         {
