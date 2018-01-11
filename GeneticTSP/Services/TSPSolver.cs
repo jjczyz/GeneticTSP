@@ -24,6 +24,9 @@ namespace GeneticTSP.Services
         public ObservableCollection<KeyValuePair<int, int>> Results = new ObservableCollection<KeyValuePair<int, int>>();
         private List<Route> _population;
         private Graph _graph;
+        private int _populationSize;
+        private float _crossoverRatio;
+        private float _mutationRatio;
 
         public TSPSolver()
         {
@@ -35,16 +38,16 @@ namespace GeneticTSP.Services
             _solver.RunWorkerCompleted += new RunWorkerCompletedEventHandler(SolverCompleted);
         }
 
-        public void Initialize(int size, bool symmetrical)
+        public void Initialize(int size, bool symmetrical, int populationSize, int crossoverRatio, int mutationRatio)
         {
             Results.Clear();
             _graph = new Graph(size, symmetrical);
             //pozostałe parametry ewolucyjne
-            InitializePopulation();
+            InitializePopulation(populationSize);
             IsInitialized = true;
         }
 
-        private void InitializePopulation() // pewnie parametr wielkości populacji, póki co dam ze 100
+        private void InitializePopulation(int size) // pewnie parametr wielkości populacji, póki co dam ze 100
         {
             var basicPermutation = new int[_graph.Size - 1]; // każdy chromosom ma n+1 elementów, ale pierwszy i ostatni element to zawsze 0
             for (int i = 1; i < _graph.Size; i++)
@@ -53,7 +56,7 @@ namespace GeneticTSP.Services
             }
             _population = new List<Route>();
             Random random = new Random();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < size; i++)
             {
                 int[] routeValues = new int[basicPermutation.Length];
                 Array.Copy(basicPermutation, routeValues, basicPermutation.Length);

@@ -55,31 +55,59 @@ namespace GeneticTSP.ViewModels
             }
         }
 
-
-
-        private int _option1 { get; set; }
-        public int Option1Max
+        private int _populationSize { get; set; }
+        public int PopulationSize
         {
-            get { return 100; }
-        }
-        public int Option1Min
-        {
-            get { return 0; }
-        }
-        public int Option1
-        {
-            get { return _option1; }
+            get { return _populationSize; }
             set
             {
-                if (_option1 != value)
+                if (_populationSize != value)
                 {
-                    if (value > Option1Max)
-                        _option1 = Option1Max;
-                    else if (value < Option1Min)
-                        _option1 = Option1Max;
+                    if (value > 500)
+                        _crossoverRatio = 500;
+                    else if (value < 3)
+                        _crossoverRatio = 3;
                     else
-                        _option1 = value;
-                    NotifyPropertyChanged("Option1");
+                        _crossoverRatio = value;
+                    NotifyPropertyChanged("CrossoverRatio");
+                }
+            }
+        }
+
+        private int _crossoverRatio { get; set; }
+        public int CrossoverRatio //w %
+        {
+            get { return _crossoverRatio; }
+            set
+            {
+                if (_crossoverRatio != value)
+                {
+                    if (value > 100)
+                        _crossoverRatio = 0;
+                    else if (value < 100)
+                        _crossoverRatio = 0;
+                    else
+                        _crossoverRatio = value;
+                    NotifyPropertyChanged("CrossoverRatio");
+                }
+            }
+        }
+
+        private int _mutationRatio { get; set; }
+        public int MutationRatio // w %
+        {
+            get { return _mutationRatio; }
+            set
+            {
+                if (_mutationRatio != value)
+                {
+                    if (value > 100)
+                        _mutationRatio = 0;
+                    else if (value < 100)
+                        _mutationRatio = 0;
+                    else
+                        _mutationRatio = value;
+                    NotifyPropertyChanged("MutationRatio");
                 }
             }
         }
@@ -92,14 +120,17 @@ namespace GeneticTSP.ViewModels
             ProgressPopulationBy10ButtonCommand = new RelayCommand(param => ProgressPopulation(10));
             ProgressPopulationBy100ButtonCommand = new RelayCommand(param => ProgressPopulation(100));
             GraphSymmetrical = true;
-            GraphSize = 10;
+            GraphSize = 30;
+            PopulationSize = 100;
+            CrossoverRatio = 50;
+            MutationRatio = 30;
         }
 
         private void ProgressPopulation(int num)
         {
             Solver.Stop();
             if(!Solver.IsInitialized)
-                Solver.Initialize(GraphSize, GraphSymmetrical);
+                Solver.Initialize(GraphSize, GraphSymmetrical, PopulationSize, CrossoverRatio, MutationRatio);
             Solver.ProgressPopulation(num);
         }
 
