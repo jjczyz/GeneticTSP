@@ -50,10 +50,10 @@ namespace GeneticTSP.Helpers
             return route;
         }
 
-        public static List<Route> GetCrossoverSubset(List<Route> population, float crossoverRatio)
+        public static List<Route> GetCrossoverSubset(List<Route> population, float crossoverRatio) //crossoverRatio w %
         {
             population = population.OrderBy(x => x.fitness).ToList();
-            var parentsAmount = (int)Math.Round(crossoverRatio * population.Count());
+            var parentsAmount = (int)Math.Round(crossoverRatio/100 * population.Count());
             return population.GetRange(0, parentsAmount);
         }
 

@@ -42,8 +42,8 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="0.5*" />
-                    <ColumnDefinition Width="2.25*" />
+                    <ColumnDefinition Width="0.75*" />
+                    <ColumnDefinition Width="2.0*" />
                 </Grid.ColumnDefinitions>
                 <Label x:Name="graphSizeLabel" Content="Rozmiar grafu" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
                 <TextBox x:Name="option1ValueTextBox" Text="{Binding GraphSize}"  VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
@@ -55,17 +55,15 @@
                     <CheckBox x:Name="graphSymmetricalCheckBox"  IsChecked="{Binding GraphSymmetrical}" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
                     <Label x:Name="graphSymmetricalLabel" Content="Symetryczny" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,0,0,2"/>
                 </Grid>
-                <Label x:Name="option2Label" Content="Parametr2" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
-                <TextBox x:Name="option2ValueTextBox" Text="{Binding Option2}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" />
-                <Slider x:Name="option2Slider" Minimum="0" Maximum="1" Value="{Binding Option2}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" />
+                <Label x:Name="populationSizeLabel" Content="Populacja" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+                <TextBox x:Name="populationSizeTextBox" Text="{Binding PopulationSize}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" />
 
-                <Label x:Name="option3Label" Content="Parametr3" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
-                <TextBox x:Name="option3ValueTextBox" Text="{Binding Option3}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" />
-                <Slider x:Name="option3Slider" Minimum="0" Maximum="50" Value="{Binding Option3}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" />
+                <Label x:Name="crossoverRatioLabel" Content="Krzyżowanie [%]" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
+                <TextBox x:Name="crossoerRatioTextBox" Text="{Binding CrossoverRatio}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" />
 
-                <Label x:Name="option4Label" Content="Parametr4" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
-                <TextBox x:Name="option4ValueTextBox" Text="{Binding Option4}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" />
-                <Slider x:Name="option4Slider" Minimum="0" Maximum="15" Value="{Binding Option4}"  HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" />
+                <Label x:Name="mutationRatioLabel" Content="Mutacja [%]" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
+                <TextBox x:Name="mutationRatioTextBox" Text="{Binding MutationRatio}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" />
+
             </Grid>
             <Grid Grid.Row="2" Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -103,8 +101,8 @@
                     </Style>
                 </Charting:Chart.LegendStyle>
                 <Charting:Chart.Axes>
-                    <Charting:LinearAxis Orientation="X" Title="Pokolenie" Interval="10" ShowGridLines="False"/>
-                    <Charting:LinearAxis Orientation="Y" Title="Najlepszy wynik"  Interval="5" ShowGridLines="False"/>
+                    <Charting:LinearAxis Orientation="X" Title="Pokolenie" ShowGridLines="False"/>
+                    <Charting:LinearAxis Orientation="Y" Title="Najlepszy wynik"  ShowGridLines="False"/>
                 </Charting:Chart.Axes>
                 <Charting:Chart.Series>
                     <Charting:LineSeries DataContext="{Binding}"
