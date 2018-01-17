@@ -79,13 +79,16 @@
             <Grid Grid.Row="3" Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button x:Name="runButton" Content="Rozpocznij" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding RunButtonCommand}"  Width="69" Height="Auto" Grid.Row="1" Grid.Column="0"/>
-                <Button x:Name="exitButton" Content="Stop" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding StopButtonCommand}"  Width="69" Height="Auto" Grid.Row="1" Grid.Column="1"/>
+                <Button x:Name="runButton" Content="Rozpocznij" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding RunButtonCommand}"  Width="69" Height="Auto" Grid.Row="0" Grid.Column="0"/>
+                <Button x:Name="exitButton" Content="Stop" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding StopButtonCommand}"  Width="69" Height="Auto" Grid.Row="0" Grid.Column="1"/>
+                <Button x:Name="resetButton" Content="Reset" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding ResetButtonCommand}"  Width="69" Height="Auto" Grid.Row="1" Grid.Column="0"/>
+                <Label x:Name="bestResultLabel" Content="{Binding BestResult}" HorizontalAlignment="Center" VerticalAlignment="Center"  Width="69" Height="Auto" Grid.Row="1" Grid.Column="1"/>
             </Grid>
 
 
@@ -108,7 +111,7 @@
                     <Charting:LineSeries DataContext="{Binding}"
                                          DependentValueBinding="{Binding Path=Value}"
                                          IndependentValueBinding="{Binding Path=Key}"
-                                         ItemsSource="{Binding Path=Results}">
+                                         ItemsSource="{Binding Path=BestResults}">
                         <Charting:LineSeries.DataPointStyle>
                             <Style TargetType="Charting:LineDataPoint">
                                 <Setter Property="Opacity" Value="0" />

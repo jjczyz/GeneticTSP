@@ -81,6 +81,8 @@
     </Compile>
     <Compile Include="Extensions\RandomExtension.cs" />
     <Compile Include="Helpers\GeneticHelper.cs" />
+    <Compile Include="Helpers\MultiThreadHelper.cs" />
+    <Compile Include="Model\ResultsModel.cs" />
     <Compile Include="Model\Route.cs" />
     <Compile Include="Model\Graph.cs" />
     <Compile Include="Services\TSPSolver.cs" />

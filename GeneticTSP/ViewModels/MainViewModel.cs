@@ -1,4 +1,5 @@
 ﻿using GeneticTSP.Services;
+using GeneticTSP.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,14 +18,35 @@ namespace GeneticTSP.ViewModels
 
         public ICommand StopButtonCommand { get; set; }
         public ICommand RunButtonCommand { get; set; }
+        public ICommand ResetButtonCommand { get; set; }
         public ICommand ProgressPopulationBy10ButtonCommand { get; set; }
         public ICommand ProgressPopulationBy100ButtonCommand { get; set; }
 
         TSPSolver Solver;
+        ResultsModel Results;
         //wyjściowa tablica wszystkich pokoleń i najlepszego wyniku w każdym pokoleniu
-        
-        public ObservableCollection<KeyValuePair<int, int>> Results { get; set; }
-        public static readonly object _resultsLock = new object();
+
+        public ObservableCollection<KeyValuePair<int, int>> BestResults
+        {
+            get
+            {
+                return Results.BestResults;
+            }
+        }
+
+        private int _bestResult { get; set; }
+        public int BestResult
+        {
+            get { return _bestResult; }
+            set
+            {
+                if (_bestResult != value)
+                {
+                    _bestResult = value;
+                    NotifyPropertyChanged("BestResult");
+                }
+            }
+        }
 
         private int _graphSize { get; set; }
         public int GraphSize
@@ -109,11 +131,11 @@ namespace GeneticTSP.ViewModels
 
         public MainViewModel()
         {
-            Results = new ObservableCollection<KeyValuePair<int, int>>();
-            BindingOperations.EnableCollectionSynchronization(Results, _resultsLock);
+            Results = new ResultsModel();
             Solver = new TSPSolver(this);          
             RunButtonCommand = new RelayCommand(Run);
-            StopButtonCommand = new RelayCommand(param => Solver.Stop());
+            StopButtonCommand = new RelayCommand(Stop);
+            ResetButtonCommand = new RelayCommand(Reset);
             ProgressPopulationBy10ButtonCommand = new RelayCommand(param => ProgressPopulation(10));
             ProgressPopulationBy100ButtonCommand = new RelayCommand(param => ProgressPopulation(100));
             GraphSymmetrical = true;
@@ -130,7 +152,10 @@ namespace GeneticTSP.ViewModels
             Solver.Stop();
             if(!Solver.IsInitialized)
                 Solver.Initialize();
+            BestResult = Solver.GetBestResult();
             Solver.ProgressPopulation(num);
+            if (Solver.GetBestResult() < BestResult) //wynik sie poprawił
+                BestResult = Solver.GetBestResult();
         }
 
         private void Run(object v)
@@ -138,6 +163,18 @@ namespace GeneticTSP.ViewModels
             Solver.Stop();
             Solver.Initialize();
             Solver.Run();
+        }
+
+        private void Stop(object v)
+        {
+            Solver.Stop();
+        }
+
+        private void Reset(object v)
+        {
+            Solver.Stop();
+            Solver.IsInitialized = false;
+            BestResults.Clear();
         }
 
         public void NotifyPropertyChanged(string s)

@@ -20,16 +20,18 @@ namespace GeneticTSP.Services
 
         BackgroundWorker _solver;
         public bool PendingNewWorker = false;
-        public bool IsFinished = false;
+        public bool IsFinished = true;
         public bool IsInitialized = false;
 
-        public ObservableCollection<KeyValuePair<int, int>> Results
+        public int BestResult
         {
-            get{ return _vm.Results; }
+            get { return _vm.BestResult; }
+            set { _vm.BestResult = value; }
         }
+
         private List<Route> _population;
         private Graph _graph;
-        private MainViewModel _vm;
+        MainViewModel _vm;
 
         public TSPSolver(MainViewModel vm)
         {
@@ -45,9 +47,8 @@ namespace GeneticTSP.Services
 
         public void Initialize()
         {
-            Results.Clear();
+            _vm.BestResults.Clear();
             _graph = new Graph(_vm.GraphSize, _vm.GraphSymmetrical);
-            //pozostałe parametry ewolucyjne
             InitializePopulation(_vm.PopulationSize);
             IsInitialized = true;
         }
@@ -89,7 +90,6 @@ namespace GeneticTSP.Services
         {
             if (_solver.WorkerSupportsCancellation == true && _solver.IsBusy)
             {
-                IsInitialized = false;
                 _solver.CancelAsync();
             }
         }
@@ -97,15 +97,20 @@ namespace GeneticTSP.Services
         private void SolverDoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-
+            IsFinished = false;
+            while(_vm.BestResults.Count() > 0)
+                MultiThreadHelper.ClearOnUI(_vm.BestResults);
             bool hasPlateaued = false; // czy wyniki już się nie polepszają
             int stopTerm = 1000; //po ilu populacjach bez zmiany zatrzymać algorytm
-            int lastResult = GetBestResult();
+            BestResult = GetBestResult();
             while(!hasPlateaued)
             {
                 ProgressPopulation(1);
-                if (GetBestResult() < lastResult) //wynik sie poprawił
+                if (GetBestResult() < BestResult) //wynik sie poprawił
+                {
                     stopTerm = 1000;
+                    BestResult = GetBestResult();
+                }
                 else
                     stopTerm--;
                 if (stopTerm == 0)
@@ -144,9 +149,10 @@ namespace GeneticTSP.Services
 
         public void ProgressPopulation(int num)
         {
+            System.Threading.Thread.Sleep(10);
             Random random = new Random();
             for (int i = 0; i < num; i++)
-            {
+            {                
                 var crossoverSubset = GeneticHelper.GetCrossoverSubset(_population, _vm.CrossoverRatio);             
                 while(crossoverSubset.Count > 1)
                 {
@@ -159,10 +165,12 @@ namespace GeneticTSP.Services
                     crossoverSubset.RemoveAt(0);
                 }
                 _population = GeneticHelper.TrimPopulation(_population, _vm.PopulationSize);
-                lock (MainViewModel._resultsLock)
-                {
-                    Results.Add(new KeyValuePair<int, int>(Results.Count + 1, GetBestResult()));
-                }
+                if (!_solver.CancellationPending && _solver.IsBusy)
+                    MultiThreadHelper.AddOnUI(_vm.BestResults, new KeyValuePair<int, int>(_vm.BestResults.Count + 1, GetBestResult()));
+                else if (_solver.IsBusy)
+                    return;
+                else
+                    _vm.BestResults.Add(new KeyValuePair<int, int>(_vm.BestResults.Count + 1, GetBestResult()));
             }
         }
 
