@@ -39,34 +39,31 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1.3*" />
-                    <ColumnDefinition Width="2.3*" />
-                    <ColumnDefinition Width="1.0*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="0.75*" />
+                    <ColumnDefinition Width="2.0*" />
                 </Grid.ColumnDefinitions>
-                <Label x:Name="graphSizeLabel" Content="Rozmiar grafu" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
-                <TextBox x:Name="option1ValueTextBox" Text="{Binding GraphSize}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2" Width="40" />
-
-                <Grid Grid.Row="1" Grid.Column="1">
+                <Label x:Name="graphSizeLabel" Content="Rozmiar grafu" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                <TextBox x:Name="option1ValueTextBox" Text="{Binding GraphSize}"  VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" />
+                <Grid Grid.Row="0" Grid.Column="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.8*"/>
                         <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.8*"/>
                     </Grid.ColumnDefinitions>
-                    <CheckBox x:Name="graphSymmetricalCheckBox"  IsChecked="{Binding GraphSymmetrical}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
-                    <Label x:Name="graphSymmetricalLabel" Content="Symetryczny" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Margin="0,0,0,2"/>
+                    <CheckBox x:Name="graphSymmetricalCheckBox"  IsChecked="{Binding GraphSymmetrical}" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+                    <Label x:Name="graphSymmetricalLabel" Content="Symetryczny" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,0,0,2"/>
                 </Grid>
-                
-                <Label x:Name="populationSizeLabel" Content="Wielkość populacji" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
-                <TextBox x:Name="populationSizeTextBox" Text="{Binding PopulationSize}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Width="40"/>
+                <Label x:Name="populationSizeLabel" Content="Populacja" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+                <TextBox x:Name="populationSizeTextBox" Text="{Binding PopulationSize}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" />
 
-                <Label x:Name="crossoverRatioLabel" Content="Krzyżowanie [%]" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
-                <TextBox x:Name="crossoverRatioTextBox" Text="{Binding CrossoverRatio}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Width="40" />
+                <Label x:Name="crossoverRatioLabel" Content="Krzyżowanie [%]" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
+                <TextBox x:Name="crossoerRatioTextBox" Text="{Binding CrossoverRatio}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" />
 
-                <Label x:Name="mutationRatioLabel" Content="Mutacja [%]" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1"/>
-                <TextBox x:Name="mutationRatioTextBox" Text="{Binding MutationRatio}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="2" Width="40" />
-       
+                <Label x:Name="mutationRatioLabel" Content="Mutacja [%]" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
+                <TextBox x:Name="mutationRatioTextBox" Text="{Binding MutationRatio}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" />
+
             </Grid>
             <Grid Grid.Row="2" Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -105,7 +102,7 @@
                 </Charting:Chart.LegendStyle>
                 <Charting:Chart.Axes>
                     <Charting:LinearAxis Orientation="X" Title="Pokolenie" ShowGridLines="False"/>
-                    <Charting:LinearAxis Orientation="Y" Title="Najlepszy wynik" ShowGridLines="False"/>
+                    <Charting:LinearAxis Orientation="Y" Title="Najlepszy wynik"  ShowGridLines="False"/>
                 </Charting:Chart.Axes>
                 <Charting:Chart.Series>
                     <Charting:LineSeries DataContext="{Binding}"

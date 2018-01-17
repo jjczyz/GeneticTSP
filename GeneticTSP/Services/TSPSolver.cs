@@ -1,6 +1,7 @@
 ﻿using GeneticTSP.Extensions;
 using GeneticTSP.Helpers;
 using GeneticTSP.Model;
+using GeneticTSP.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace GeneticTSP.Services
 {
@@ -21,14 +23,15 @@ namespace GeneticTSP.Services
         public bool IsFinished = false;
         public bool IsInitialized = false;
 
-        public ObservableCollection<KeyValuePair<int, int>> Results = new ObservableCollection<KeyValuePair<int, int>>();
+        public ObservableCollection<KeyValuePair<int, int>> Results
+        {
+            get{ return _vm.Results; }
+        }
         private List<Route> _population;
         private Graph _graph;
-        private int _populationSize;
-        private float _crossoverRatio;
-        private float _mutationRatio;
+        private MainViewModel _vm;
 
-        public TSPSolver()
+        public TSPSolver(MainViewModel vm)
         {
             // BackgroundWorker do wykonywania operacji asynchronicznie
             _solver = new BackgroundWorker();
@@ -36,14 +39,16 @@ namespace GeneticTSP.Services
             _solver.WorkerReportsProgress = true;
             _solver.DoWork += new DoWorkEventHandler(SolverDoWork);
             _solver.RunWorkerCompleted += new RunWorkerCompletedEventHandler(SolverCompleted);
+
+            _vm = vm;
         }
 
-        public void Initialize(int size, bool symmetrical, int populationSize, int crossoverRatio, int mutationRatio)
+        public void Initialize()
         {
             Results.Clear();
-            _graph = new Graph(size, symmetrical);
+            _graph = new Graph(_vm.GraphSize, _vm.GraphSymmetrical);
             //pozostałe parametry ewolucyjne
-            InitializePopulation(populationSize);
+            InitializePopulation(_vm.PopulationSize);
             IsInitialized = true;
         }
 
@@ -84,6 +89,7 @@ namespace GeneticTSP.Services
         {
             if (_solver.WorkerSupportsCancellation == true && _solver.IsBusy)
             {
+                IsInitialized = false;
                 _solver.CancelAsync();
             }
         }
@@ -92,13 +98,25 @@ namespace GeneticTSP.Services
         {
             BackgroundWorker worker = sender as BackgroundWorker;
 
-            //TODO
-
-            if (worker.CancellationPending)
+            bool hasPlateaued = false; // czy wyniki już się nie polepszają
+            int stopTerm = 1000; //po ilu populacjach bez zmiany zatrzymać algorytm
+            int lastResult = GetBestResult();
+            while(!hasPlateaued)
             {
-                e.Cancel = true;
-                return;
-            }
+                ProgressPopulation(1);
+                if (GetBestResult() < lastResult) //wynik sie poprawił
+                    stopTerm = 1000;
+                else
+                    stopTerm--;
+                if (stopTerm == 0)
+                    hasPlateaued = true;
+
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }           
         }
 
         private void SolverCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -129,19 +147,22 @@ namespace GeneticTSP.Services
             Random random = new Random();
             for (int i = 0; i < num; i++)
             {
-                var crossoverSubset = GeneticHelper.GetCrossoverSubset(_population, 0.50f);             
+                var crossoverSubset = GeneticHelper.GetCrossoverSubset(_population, _vm.CrossoverRatio);             
                 while(crossoverSubset.Count > 1)
                 {
                     var secondParentIdx = random.Next(0, crossoverSubset.Count());
                     var child = GeneticHelper.Crossover(crossoverSubset[0], crossoverSubset[secondParentIdx]);
-                    if (random.Next(1, 100) < 10)
+                    if (random.Next(1, 100) < _vm.MutationRatio)
                         child = GeneticHelper.Mutation(child);
                     _population.Add(child);
                     crossoverSubset.RemoveAt(secondParentIdx);
                     crossoverSubset.RemoveAt(0);
                 }
-                _population = GeneticHelper.TrimPopulation(_population, 100);
-                Results.Add(new KeyValuePair<int, int>(Results.Count + 1, GetBestResult()));
+                _population = GeneticHelper.TrimPopulation(_population, _vm.PopulationSize);
+                lock (MainViewModel._resultsLock)
+                {
+                    Results.Add(new KeyValuePair<int, int>(Results.Count + 1, GetBestResult()));
+                }
             }
         }
 
