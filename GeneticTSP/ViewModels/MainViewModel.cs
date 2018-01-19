@@ -118,8 +118,8 @@ namespace GeneticTSP.ViewModels
             {
                 if (_mutationRatio != value)
                 {
-                    if (value < 0.1f)
-                        _mutationRatio = 0.1f;
+                    if (value < 0.01f)
+                        _mutationRatio = 0.01f;
                     else if (value > 100.0f)
                         _mutationRatio = 100.0f;
                     else

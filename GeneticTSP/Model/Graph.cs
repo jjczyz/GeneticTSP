@@ -38,7 +38,7 @@ namespace GeneticTSP.Model
                         continue;
                     else
                     {
-                        Distances[i, j] = rand.Next(1, 10); // odległości losowe od 1 do 10
+                        Distances[i, j] = rand.Next(1, 100); // odległości losowe od 1 do 100
                         if (Symmetrical) Distances[j, i] = Distances[i, j]; //jeśli symetryczny to ustawiamy też odległość w drugą strone (jak było 1 do 2 to 2 do 1)
                     }
                 }

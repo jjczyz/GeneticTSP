@@ -149,7 +149,7 @@ namespace GeneticTSP.Services
 
         public void ProgressPopulation(int num)
         {
-            System.Threading.Thread.Sleep(10);
+            
             Random random = new Random();
             for (int i = 0; i < num; i++)
             {                
@@ -165,6 +165,7 @@ namespace GeneticTSP.Services
                     crossoverSubset.RemoveAt(0);
                 }
                 _population = GeneticHelper.TrimPopulation(_population, _vm.PopulationSize);
+                System.Threading.Thread.Sleep(10);
                 if (!_solver.CancellationPending && _solver.IsBusy)
                     MultiThreadHelper.AddOnUI(_vm.BestResults, new KeyValuePair<int, int>(_vm.BestResults.Count + 1, GetBestResult()));
                 else if (_solver.IsBusy)
